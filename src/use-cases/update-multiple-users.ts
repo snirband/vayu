@@ -1,5 +1,5 @@
 import { DbService } from '../db/db.service';
-import { updatedUser, UserStatus } from '../models/user';
+import { updatedUser } from '../models/user-models';
 
 export const updateMultipleUsersStatuses = async (users: updatedUser[]) => {
   const dbService = DbService.getInstance();
@@ -8,7 +8,6 @@ export const updateMultipleUsersStatuses = async (users: updatedUser[]) => {
     await dbService.updateMultipleUsersStatuses(users);
     return { message: 'Users updated successfully' };
   } catch (error: any) {
-    console.error(`Error updating users: ${error}`);
     throw new Error(`Failed to update users: ${error.message}`);
   }
 };

@@ -12,7 +12,6 @@ export const removeUserFromGroup = async (userId: number) => {
     const dbService = DbService.getInstance();
     await dbService.removeUserFromGroup(userId);
   } catch (error) {
-    console.error(`Error removing user from group2: ${error}`);
     throw new Error(`Failed to remove user from group: ${error}`);
   }
   return { message: 'User removed from group successfully' };

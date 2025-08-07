@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import { db } from './db';
-import { updatedUser, UserStatus } from '../models/user';
+import { updatedUser } from '../models/user-models';
 
 export class DbService {
   private static instance: DbService;
@@ -54,7 +54,6 @@ export class DbService {
           .update({ status: userCount === 0 ? 'empty' : 'notEmpty' });
       });
     } catch (error) {
-      console.error(`Error removing user from group: ${error}`);
       throw new Error(`Failed to remove user from group: ${error}`);
     }
   }
@@ -66,11 +65,9 @@ export class DbService {
           trx('users').where({ id }).update({ status })
         );
 
-        console.log(`Updating statuses for ${updatePromises} users...`);
         await Promise.all(updatePromises);
       });
     } catch (error: any) {
-      console.error(`Error updating users: ${error}`);
       throw new Error(`Failed to update users: ${error.message}`);
     }
   }

@@ -1,5 +1,5 @@
 import express from 'express';
-import userRoutes from './src/endpoints/endpoints';
+import userRoutes from './endpoints/endpoints';
 
 const app = express();
 

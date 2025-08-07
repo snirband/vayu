@@ -2,10 +2,25 @@ import express from 'express';
 import { getDataPaginated } from '../use-cases/pagination';
 import { removeUserFromGroup } from '../use-cases/remove-user';
 import { updateMultipleUsersStatuses } from '../use-cases/update-multiple-users';
+import { z } from 'zod';
 
 const router = express.Router();
 
+const querySchema = z.object({
+  page: z.string().regex(/^[1-9]\d*$/, {
+    message: "Page must be a positive integer greater than or equal to 1",
+  }),
+  limit: z.string().regex(/^[1-9]\d*$/, {
+    message: "Limit must be a positive integer greater than or equal to 1",
+  }),
+});
+
+
 router.get('/users', async (req, res) => {
+  const result = querySchema.safeParse(req.query);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.flatten() });
+  }
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
 
@@ -13,12 +28,15 @@ router.get('/users', async (req, res) => {
     const result = await getDataPaginated('users', page, limit);
     res.json(result);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
 router.get('/groups', async (req, res) => {
+  const result = querySchema.safeParse(req.query);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.flatten() });
+  }
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
 
@@ -26,7 +44,6 @@ router.get('/groups', async (req, res) => {
     const result = await getDataPaginated('groups', page, limit);
     res.json(result);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -72,7 +89,6 @@ router.patch('/users/statuses', async (req, res) => {
     await updateMultipleUsersStatuses(updates);
     res.status(200).json({ message: 'updates executed successfully' });
   } catch (err: any) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
