@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "watch": "tsc --watch",
-    "dev": "nodemon src/index.ts",
-    "clean": "rm -rf dist",
+    "start": "nodemon src/index.ts",
     "format": "prettier --write ."
   },
   "repository": {
