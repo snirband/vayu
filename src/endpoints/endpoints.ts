@@ -8,13 +8,12 @@ const router = express.Router();
 
 const querySchema = z.object({
   page: z.string().regex(/^[1-9]\d*$/, {
-    message: "Page must be a positive integer greater than or equal to 1",
+    message: 'Page must be a positive integer greater than or equal to 1',
   }),
   limit: z.string().regex(/^[1-9]\d*$/, {
-    message: "Limit must be a positive integer greater than or equal to 1",
+    message: 'Limit must be a positive integer greater than or equal to 1',
   }),
 });
-
 
 router.get('/users', async (req, res) => {
   const result = querySchema.safeParse(req.query);
